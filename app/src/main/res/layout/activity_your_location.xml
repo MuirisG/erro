@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#353131"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:id="@+id/iv_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:src="@drawable/menu"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginRight="40dp"
+                android:fontFamily="@font/audiowide"
+                android:gravity="center_vertical"
+                android:text="your location"
+                android:textAlignment="center"
+                android:textColor="#00BCD4"
+                android:textSize="35dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/btn_zone1"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:background="@drawable/zonebutton"
+                android:fontFamily="@font/audiowide"
+                android:gravity="center"
+                android:text="58.657"
+                android:textColor="#F9FBFC"
+                android:textSize="50dp" />
+
+            <EditText
+                android:id="@+id/input_a"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/zonebutton"
+                android:fontFamily="@font/audiowide"
+                android:gravity="center"
+                android:hint="enter lenght here"
+                android:textColorHint="#F9FBFC"
+                android:textColor="#F9FBFC"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/input_b"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/zonebutton"
+                android:fontFamily="@font/audiowide"
+                android:gravity="center"
+                android:hint="enter breadth here"
+                android:textColorHint="#F9FBFC"
+                android:textColor="#F9FBFC"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/calculate"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/zonebutton"
+                android:fontFamily="@font/audiowide"
+                android:gravity="center"
+                android:text="calculate"
+                android:textColor="#F9FBFC"
+                android:textSize="20dp" />
+            <EditText
+                android:id="@+id/btn_result"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/zonebutton"
+                android:fontFamily="@font/audiowide"
+                android:gravity="center"
+                android:text="result"
+                android:textColor="#F9FBFC"
+                android:textSize="20dp" />
+            <TextView
+                android:id="@+id/text_c"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/zone_button"
+                android:fontFamily="@font/audiowide"
+                android:gravity="center"
+                android:text="send"
+                android:textColor="#494444"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

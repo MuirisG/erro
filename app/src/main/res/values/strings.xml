@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">erro</string>
+    <string name="select_zone">Select Your Zone</string>
+    <string name="zone1">Zone 1</string>
+    <string name="zone2">Zone 2</string>
+    <string name="zone3">Zone 3</string>
+    <string name="zone4">Zone 4</string>
+    <string name="select_directorate">Select Directorate</string>
+
+</resources>

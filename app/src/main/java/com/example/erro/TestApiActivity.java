@@ -67,6 +67,7 @@ public class TestApiActivity extends AppCompatActivity implements View.OnClickLi
             loadingDialog = WeiboDialogUtils.createLoadingDialog(this, "Login To Zone App");
             loadingDialog.show();
             RequestLogin("Muiris", "12345");
+//            new GetLogin2().execute();
         } else if(view.getId() == R.id.sendBtn2) {
             loadingDialog = WeiboDialogUtils.createLoadingDialog(this, "Login To Zone App");
             loadingDialog.show();
@@ -294,6 +295,75 @@ public class TestApiActivity extends AppCompatActivity implements View.OnClickLi
                 }, 1500);
             } else {
                 new GlideToast.makeToast(TestApiActivity.this,"Login Fault");
+            }
+        }
+    }
+
+    private class GetLogin2 extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            String sub_url = "users/loginUser.php?";
+
+            String password = "6Godmode!!";
+            String parameters = "email=" +  username_myserver;
+            String base_url = "https://mucouncil.net/api/apitest";
+            String url = base_url + sub_url + parameters;
+            String jsonStr = sh.makeServiceCall(url);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+                    String name = jsonObj.getString("name");
+                    String id = jsonObj.getString("id");
+                    String pw = jsonObj.getString("password");
+                    if (password.equals(pw)){
+                        login_success = "1";
+                    }
+                    else {
+                        login_success = "0";
+                    }
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new GlideToast.makeToast(TestApiActivity.this,"Json parsing error 222: " + e.getMessage());
+                        }
+                    });
+                }
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new GlideToast.makeToast(TestApiActivity.this,"Json response error");
+                    }
+                });
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            WeiboDialogUtils.closeDialog(loadingDialog);
+            if(login_success.equals("1")){
+                new GlideToast.makeToast(TestApiActivity.this,"Login Success");
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(TestApiActivity.this, selectSurface.class);
+                        startActivity(intent);
+                    }
+                }, 1500);
+
+            } else {
+                Toast.makeText(getApplicationContext(),"Username or password is incorrect", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -10,9 +10,8 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
 public class ApiClient {
-    private static final String BASE_URL = "http://mycouncil.net";
+    private static final String BASE_URL = "https://mycouncil.net";
     private static ApiClient mInstance;
     private static OkHttpClient client = buildClient();
     Gson gson = new GsonBuilder().setLenient().create();

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.erro">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".seldirectorate"></activity>
+        <activity android:name=".TestApiActivity"></activity>
+        <activity android:name=".seldirectorate" />
         <activity android:name=".reviewData" />
         <activity android:name=".selectDirectorate" />
         <activity android:name=".selectSurface" />

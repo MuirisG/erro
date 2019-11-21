@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TestApiActivity"
+    android:orientation="vertical"
+    android:padding="20dp">
+    <TextView
+        style="@style/apiTestAcitivy_textview"
+        android:text="API mode1_POST(Used at zone project)"/>
+    <Button
+        android:id="@+id/sendBtn1"
+        style="@style/apiTestActivity_button"
+        android:text="send api(1)"/>
+    <TextView
+        style="@style/apiTestAcitivy_textview"
+        android:text="API mode2_GET(Used at zone project)"/>
+    <Button
+        android:id="@+id/sendBtn2"
+        style="@style/apiTestActivity_button"
+        android:text="send api(2)"/>
+    <TextView
+        style="@style/apiTestAcitivy_textview"
+        android:text="API mode3_GET(My Server)"/>
+    <Button
+        android:id="@+id/sendBtn3"
+        style="@style/apiTestActivity_button"
+        android:text="send api(3)"/>
+    <TextView
+        style="@style/apiTestAcitivy_textview"
+        android:text="API mode4(Default)"/>
+    <Button
+        android:id="@+id/sendBtn4"
+        style="@style/apiTestActivity_button"
+        android:text="send api(4)"/>
+    <TextView
+        style="@style/apiTestAcitivy_textview"
+        android:text="API mode5(My Server)"/>
+    <Button
+        android:id="@+id/sendBtn5"
+        style="@style/apiTestActivity_button"
+        android:text="send api(5)"/>
+
+</LinearLayout>

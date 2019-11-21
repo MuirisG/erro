@@ -86,10 +86,19 @@
                 android:text="Zone 4"
                 android:textColor="#F9FBFC"
                 android:textSize="20dp" />
+            <Button
+                android:id="@+id/test_api_btn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:textColor="#ffffff"
+                android:background="@drawable/zone_button"
+                android:textAllCaps="false"
+                android:text="Test API For YOUR NEW PHONE"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="220dp"
+                android:layout_marginTop="60dp"
                 android:background="@drawable/zone_button"
                 android:fontFamily="@font/audiowide"
                 android:gravity="center"

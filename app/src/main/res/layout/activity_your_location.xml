@@ -4,7 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#353131"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusableInTouchMode="true">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -39,48 +43,88 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/btn_zone1"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                android:background="@drawable/zonebutton"
-                android:fontFamily="@font/audiowide"
-                android:gravity="center"
-                android:text="58.657"
-                android:textColor="#F9FBFC"
-                android:textSize="50dp" />
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_x_int"
+                    android:layout_width="wrap_content"
+                    android:layout_height="90dp"
+                    android:paddingBottom="0dp"
+                    android:fontFamily="@font/audiowide"
+                    android:gravity="bottom"
+                    android:textColor="#F9FBFC"
+                    android:textSize="60dp" />
+                <TextView
+                    android:id="@+id/tv_x_flot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="90dp"
+                    android:layout_toRightOf="@id/tv_x_int"
+                    android:paddingBottom="8dp"
+                    android:fontFamily="@font/audiowide"
+                    android:gravity="bottom"
+                    android:textColor="#F9FBFC"
+                    android:textSize="40dp" />
+                <TextView
+                    android:id="@+id/tv_y_int"
+                    android:layout_width="wrap_content"
+                    android:layout_height="90dp"
+                    android:paddingBottom="0dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toLeftOf="@id/tv_y_flot"
+                    android:fontFamily="@font/audiowide"
+                    android:gravity="bottom"
+                    android:textColor="#F9FBFC"
+                    android:textSize="60dp" />
+                <TextView
+                    android:id="@+id/tv_y_flot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="90dp"
+                    android:layout_below="@id/tv_y_flot"
+                    android:layout_alignParentRight="true"
+                    android:paddingBottom="8dp"
+                    android:layout_alignParentBottom="true"
+                    android:fontFamily="@font/audiowide"
+                    android:gravity="bottom"
+                    android:textColor="#F9FBFC"
+                    android:textSize="40dp" />
+            </RelativeLayout>
+
+
 
             <EditText
                 android:id="@+id/input_a"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/zonebutton"
                 android:fontFamily="@font/audiowide"
                 android:gravity="center"
                 android:hint="enter lenght here"
-                android:textColorHint="#F9FBFC"
+                android:textColorHint="@color/texthintcolor"
+                android:inputType="numberDecimal"
                 android:textColor="#F9FBFC"
                 android:textSize="20dp" />
 
             <EditText
                 android:id="@+id/input_b"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/zonebutton"
                 android:fontFamily="@font/audiowide"
                 android:gravity="center"
                 android:hint="enter breadth here"
-                android:textColorHint="#F9FBFC"
+                android:inputType="numberDecimal"
+                android:textColorHint="@color/texthintcolor"
                 android:textColor="#F9FBFC"
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/calculate"
+                android:id="@+id/button_calculate"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="70dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/zonebutton"
                 android:fontFamily="@font/audiowide"
@@ -88,19 +132,20 @@
                 android:text="calculate"
                 android:textColor="#F9FBFC"
                 android:textSize="20dp" />
-            <EditText
-                android:id="@+id/btn_result"
+            <TextView
+                android:id="@+id/text_result"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/zonebutton"
                 android:fontFamily="@font/audiowide"
                 android:gravity="center"
-                android:text="result"
+                android:hint="result"
+                android:textColorHint="@color/texthintcolor"
                 android:textColor="#F9FBFC"
                 android:textSize="20dp" />
             <TextView
-                android:id="@+id/text_c"
+                android:id="@+id/button_next"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="25dp"
@@ -113,4 +158,5 @@
 
         </LinearLayout>
     </LinearLayout>
+    </ScrollView>
 </LinearLayout>

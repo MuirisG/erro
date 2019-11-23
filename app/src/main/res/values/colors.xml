@@ -12,5 +12,6 @@
     <color name="lightgreen">#414e4e</color>
     <color name="whiteLightColor">#7e7e7e</color>
     <color name="greenColor">#00ff00</color>
+    <color name="texthintcolor">#6e6e6e</color>
 
 </resources>

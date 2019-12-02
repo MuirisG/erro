@@ -49,6 +49,7 @@ public class yourLocation extends AppCompatActivity implements View.OnClickListe
     EditText input_a, input_b;
     TextView tv_result;
     TextView tvXInt, tvXFloat, tvYInt, tvYFloat;
+    TextView tvNext;
 
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
@@ -67,6 +68,8 @@ public class yourLocation extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_your_location);
         TextView calculate;
+        tvNext = findViewById(R.id.button_next);
+        tvNext.setOnClickListener(this);
         calculate = findViewById(R.id.button_calculate);
         tv_result = findViewById(R.id.text_result);
         input_a = findViewById(R.id.input_a);
@@ -93,6 +96,9 @@ public class yourLocation extends AppCompatActivity implements View.OnClickListe
             } else {
                 new GlideToast.makeToast(yourLocation.this, "input two number");
             }
+        } else if(view.getId() == R.id.button_next) {
+            Intent intent = new Intent(getApplicationContext(), selectZone.class);
+            startActivity(intent);
         }
     }
     private void init() {

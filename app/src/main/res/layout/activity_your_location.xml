@@ -152,7 +152,7 @@
                 android:background="@drawable/zone_button"
                 android:fontFamily="@font/audiowide"
                 android:gravity="center"
-                android:text="send"
+                android:text="Next"
                 android:textColor="#494444"
                 android:textSize="20dp" />
 

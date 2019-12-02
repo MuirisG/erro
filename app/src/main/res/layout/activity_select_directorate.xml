@@ -28,74 +28,52 @@
                 android:layout_marginRight="40dp"
                 android:fontFamily="@font/audiowide"
                 android:gravity="center_vertical"
-                android:text="select surface"
+                android:text="select directorate"
                 android:textAlignment="center"
                 android:textColor="#00BCD4"
                 android:textSize="25dp" />
         </LinearLayout>
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="vertical">
+            android:layout_marginRight="20dp">
 
             <TextView
-                android:id="@+id/btn_zone1"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:background="#494444"
-                android:fontFamily="@font/audiowide"
-                android:gravity="center"
-                android:text="tarmac"
-                android:textColor="#00BCD4"
-                android:textSize="20dp" />
+                android:id="@+id/btn_youghal"
+                style="@style/surface_textview"
+                android:text="youghal"/>
 
             <TextView
-                android:id="@+id/btn_zone2"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="10dp"
-                android:background="#494444"
-                android:fontFamily="@font/audiowide"
-                android:gravity="center"
-                android:text="grass verge"
-                android:textColor="#00BCD4"
-                android:textSize="20dp" />
+                android:id="@+id/btn_cobh"
+                android:layout_below="@id/btn_youghal"
+                style="@style/surface_textview"
+                android:text="cobh"/>
 
             <TextView
-                android:id="@+id/btn_zone3"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="10dp"
-                android:background="#494444"
-                android:fontFamily="@font/audiowide"
-                android:gravity="center"
-                android:text="concrete foothpath"
-                android:textColor="#00BCD4"
-                android:textSize="20dp" />
+                android:id="@+id/btn_glanmire"
+                android:layout_below="@id/btn_cobh"
+                style="@style/surface_textview"
+                android:text="glanmire"/>
 
             <TextView
-                android:id="@+id/btn_zone4"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="10dp"
-                android:background="#494444"
-                android:fontFamily="@font/audiowide"
-                android:gravity="center"
-                android:text="hra"
-                android:textColor="#00BCD4"
-                android:textSize="20dp" />
+                android:id="@+id/btn_blarney"
+                android:layout_below="@id/btn_glanmire"
+                style="@style/surface_textview"
+                android:text="blarney"/>
             <TextView
+                android:id="@+id/btn_next"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="220dp"
-                android:background="#00BCD4"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/zone_button"
                 android:fontFamily="@font/audiowide"
                 android:gravity="center"
-                android:text="next"
+                android:text="Next"
                 android:textColor="#494444"
                 android:textSize="20dp" />
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

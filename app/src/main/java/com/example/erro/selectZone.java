@@ -13,7 +13,7 @@ import android.os.Bundle;
 
 public class selectZone extends AppCompatActivity implements View.OnClickListener{
 
-    TextView btn_zone1, btn_zone2, btn_zone3, btn_zone4;
+    TextView btn_zone1, btn_zone2, btn_zone3, btn_zone4, btn_next;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,20 +25,22 @@ public class selectZone extends AppCompatActivity implements View.OnClickListene
         btn_zone2 = (TextView) findViewById(R.id.btn_zone2);
         btn_zone3 = (TextView) findViewById(R.id.btn_zone3);
         btn_zone4 = (TextView) findViewById(R.id.btn_zone4);
+        btn_next = findViewById(R.id.btn_next);
         btn_zone1.setOnClickListener(this);
         btn_zone2.setOnClickListener(this);
         btn_zone3.setOnClickListener(this);
         btn_zone4.setOnClickListener(this);
+        btn_next.setOnClickListener(this);
 
     }
     @Override
     public void onClick(View v) {
-        if(v==btn_zone1 || v == btn_zone2 || v == btn_zone3 || v == btn_zone4) {
-            Intent intent = new Intent(getApplicationContext(),yourLocation.class);
+        if(v==btn_zone1 || v == btn_zone2 || v == btn_zone3 || v == btn_zone4 || v == btn_next) {
+            Intent intent = new Intent(getApplicationContext(),selectDirectorate.class);
             startActivity(intent);
         } else if( v.getId()==R.id.test_api_btn) {
             Intent intent = new Intent(getApplicationContext(),TestApiActivity.class);
-            startActivity(intent);
+//            startActivity(intent);
         }
     }
 }

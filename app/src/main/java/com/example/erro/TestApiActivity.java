@@ -40,7 +40,7 @@ public class TestApiActivity extends AppCompatActivity implements View.OnClickLi
     protected Dialog loadingDialog;
     String login_success = "0";
     String login_success1 = "0";
-    String username_myserver = "emailjereme@gmail.com";
+    String username_myserver = "...";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +64,13 @@ public class TestApiActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.sendBtn1) {
-            loadingDialog = WeiboDialogUtils.createLoadingDialog(this, "Login To Zone App");
-            loadingDialog.show();
-            RequestLogin("Muiris", "12345");
-//            new GetLogin2().execute();
+//            loadingDialog = WeiboDialogUtils.createLoadingDialog(this, "Login To Zone App");
+//            loadingDialog.show();
+//            RequestLogin("Muiris", "12345");
         } else if(view.getId() == R.id.sendBtn2) {
-            loadingDialog = WeiboDialogUtils.createLoadingDialog(this, "Login To Zone App");
-            loadingDialog.show();
-            RequestLogin("aaaaaaaa", "aaaaaaa");
+//            loadingDialog = WeiboDialogUtils.createLoadingDialog(this, "Login To Zone App");
+//            loadingDialog.show();
+//            RequestLogin("aaaaaaaa", "aaaaaaa");
         } else if(view.getId() == R.id.sendBtn3) {
             loadingDialog = WeiboDialogUtils.createLoadingDialog(this, "Login To My Server");
             loadingDialog.show();
@@ -92,64 +91,64 @@ public class TestApiActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public void RequestLogin(final String username, String password) {
-        String code,  gmail;
-        code = "login";
-        gmail = "test@gmail";
-        getMessageForm = new GetMessageForm(code, username, password, gmail);
-        Call<GetMessageResponse> mService =
-                ApiClient.getInstance()
-                        .getApi()
-                        .getMessage(
-                                getMessageForm.getCode(),
-                                getMessageForm.getUsername(),
-                                getMessageForm.getPassword(),
-                                getMessageForm.getgMail());
-        mService.enqueue(
-                new Callback<GetMessageResponse>() {
-                    @Override
-                    public void onResponse(
-                            Call<GetMessageResponse> call,
-                            Response<GetMessageResponse> response) {
-                        try {
-                            if (response.isSuccessful()) {
-                                WeiboDialogUtils.closeDialog(loadingDialog);
-                                new GlideToast.makeToast(TestApiActivity.this,"Login Success");
-                                final Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Intent intent = new Intent(TestApiActivity.this, selectSurface.class);
-                                        startActivity(intent);
-                                    }
-                                }, 1500);
-
-
-                            } else {
-                                WeiboDialogUtils.closeDialog(loadingDialog);
-                                String s = response.errorBody().string();
-                                try {
-                                    JSONObject jsonObject = new JSONObject(s);
-                                    new GlideToast.makeToast(TestApiActivity.this,"Login Fault Error 401");
-                                } catch (JSONException e) {
-                                    new GlideToast.makeToast(TestApiActivity.this,"Login Fault Error 404");
-                                }
-                            }
-                        } catch (IOException e) {
-                            WeiboDialogUtils.closeDialog(loadingDialog);
-                            new GlideToast.makeToast(TestApiActivity.this,"Connect Server Error");
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(retrofit2.Call<GetMessageResponse> call, Throwable t) {
-                        call.cancel();
-                        WeiboDialogUtils.closeDialog(loadingDialog);
-                        new GlideToast.makeToast(TestApiActivity.this,"Network Error");
-                    }
-                });
-    }
+//    public void RequestLogin(final String username, String password) {
+//        String code,  gmail;
+//        code = "login";
+//        gmail = "test@gmail";
+//        getMessageForm = new GetMessageForm(code, username, password, gmail);
+//        Call<GetMessageResponse> mService =
+//                ApiClient.getInstance()
+//                        .getApi()
+//                        .getMessage(
+//                                getMessageForm.getCode(),
+//                                getMessageForm.getUsername(),
+//                                getMessageForm.getPassword(),
+//                                getMessageForm.getgMail());
+//        mService.enqueue(
+//                new Callback<GetMessageResponse>() {
+//                    @Override
+//                    public void onResponse(
+//                            Call<GetMessageResponse> call,
+//                            Response<GetMessageResponse> response) {
+//                        try {
+//                            if (response.isSuccessful()) {
+//                                WeiboDialogUtils.closeDialog(loadingDialog);
+//                                new GlideToast.makeToast(TestApiActivity.this,"Login Success");
+//                                final Handler handler = new Handler();
+//                                handler.postDelayed(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        Intent intent = new Intent(TestApiActivity.this, selectSurface.class);
+//                                        startActivity(intent);
+//                                    }
+//                                }, 1500);
+//
+//
+//                            } else {
+//                                WeiboDialogUtils.closeDialog(loadingDialog);
+//                                String s = response.errorBody().string();
+//                                try {
+//                                    JSONObject jsonObject = new JSONObject(s);
+//                                    new GlideToast.makeToast(TestApiActivity.this,"Login Fault Error 401");
+//                                } catch (JSONException e) {
+//                                    new GlideToast.makeToast(TestApiActivity.this,"Login Fault Error 404");
+//                                }
+//                            }
+//                        } catch (IOException e) {
+//                            WeiboDialogUtils.closeDialog(loadingDialog);
+//                            new GlideToast.makeToast(TestApiActivity.this,"Connect Server Error");
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(retrofit2.Call<GetMessageResponse> call, Throwable t) {
+//                        call.cancel();
+//                        WeiboDialogUtils.closeDialog(loadingDialog);
+//                        new GlideToast.makeToast(TestApiActivity.this,"Network Error");
+//                    }
+//                });
+//    }
 
     private class GetLogin extends AsyncTask<Void, Void, Void> {
         @Override

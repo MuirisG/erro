@@ -5,18 +5,30 @@ import java.io.Serializable;
 public class GetMessageForm implements Serializable {
 
     private String code;
-    private String username;
-    private String password;
+    private String zone;
+    private String directorate;
+    private String surface;
+    private String area;
+    private String locationX;
+    private String locationY;
     private String gmail;
 
     public GetMessageForm(
             String code,
-            String username,
-            String password,
+            String zone,
+            String directorate,
+            String surface,
+            String area,
+            String locationX,
+            String locationY,
             String gmail) {
         this.code = code;
-        this.username = username;
-        this.password = password;
+        this.zone = zone;
+        this.directorate = directorate;
+        this.surface = surface;
+        this.area = area;
+        this.locationX = locationX;
+        this.locationY = locationY;
         this.gmail = gmail;
     }
 
@@ -24,15 +36,31 @@ public class GetMessageForm implements Serializable {
         return code;
     }
 
-    public String getUsername() {
-        return username;
+    public String getZone() {
+        return zone;
     }
 
-    public String getPassword() {
-        return password;
+    public String getDirectorate() {
+        return directorate;
     }
 
-    public String getgMail() {
+    public String getSurface() {
+        return surface;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public String getLocationX() {
+        return locationX;
+    }
+
+    public String getLocationY() {
+        return locationY;
+    }
+
+    public String getGmail() {
         return gmail;
     }
 

@@ -10,7 +10,11 @@ public interface ApiInterface {
     @POST("/api/apitest")
     Call<GetMessageResponse> getMessage(
             @Field("code") String code,
-            @Field("username") String username,
-            @Field("password") String password,
+            @Field("zone") String zone,
+            @Field("directorate") String directorate,
+            @Field("surface") String surface,
+            @Field("area") String area,
+            @Field("locationX") String locationX,
+            @Field("locationY") String locationY,
             @Field("gmail") String gmail);
 }

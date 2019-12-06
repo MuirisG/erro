@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -16,6 +17,7 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -27,8 +29,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.erro.API.ApiClient;
+import com.example.erro.API.GetMessageForm;
+import com.example.erro.API.GetMessageResponse;
 import com.example.erro.Adapter.SpinnerAdapter;
 import com.example.erro.Utils.GlideToast;
+import com.example.erro.Utils.WeiboDialogUtils;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -49,10 +55,18 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class reviewData extends AppCompatActivity implements View.OnClickListener{
 
@@ -60,11 +74,12 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
     String[] zonelist={"zone1", "zone2", "zone3","zone4"};
     String[] directoratelist={"youghal", "cobh", "glanmire","blarney"};
     String[] surfacelist={"tarmac", "grass verge", "concrete foothpath","hra"};
-    String selectedZone, selectedDirectorate, selectedSurface, selectedLocationX, selectedLocationY;
+    String selectedZone, selectedDirectorate, selectedSurface, selectedLocationX, selectedLocationY, selectedArea;
     TextView tvlocationX, tvlocationY, tvResult, btnResult;
     EditText etLength, etBreadth;
-    Button btnAttachPhoto;
+    Button btnAttachPhoto, btnSend;
     ImageView ivPhoto;
+    protected Dialog loadingDialog;
 
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
@@ -83,6 +98,8 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
     private String imagepath="";
     private int serverResponseCode = 0;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+
+    private GetMessageForm getMessageForm;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +117,11 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
         spinnerSurface = findViewById(R.id.spinner_surface);
         btnAttachPhoto = findViewById(R.id.btn_attach_photo);
         ivPhoto = findViewById(R.id.attached_photo);
+        btnSend = findViewById(R.id.btn_send);
 
         btnResult.setOnClickListener(this);
         btnAttachPhoto.setOnClickListener(this);
+        btnSend.setOnClickListener(this);
 
         SpinnerAdapter customAdapter1 = new SpinnerAdapter(getApplicationContext(),zonelist);
         spinnerZone.setAdapter(customAdapter1);
@@ -331,6 +350,7 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
                 b = Integer.valueOf(etBreadth.getText().toString());
                 c = a * b;
                 tvResult.setText(String.valueOf(c));
+                selectedArea = String.valueOf(c);
             } else {
                 new GlideToast.makeToast(reviewData.this, "input two number");
             }
@@ -341,8 +361,66 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
             ivPhoto.getLayoutParams().width = newWidth;
             ivPhoto.setScaleType(ImageView.ScaleType.FIT_XY);
             getImageFromAlbum();
+        } else if(view.getId() == R.id.btn_send) {
+            loadingDialog = WeiboDialogUtils.createLoadingDialog(this, "Sending data");
+            loadingDialog.show();
+            RequestSend();
         }
     }
 
+    public void RequestSend() {
+        String code,  gmail;
+        code = "erro";
+        gmail = "test@gmail";
+
+
+        getMessageForm = new GetMessageForm(code, selectedZone, selectedDirectorate, selectedSurface, selectedArea, selectedLocationX, selectedLocationY, gmail);
+        Call<GetMessageResponse> mService =
+                ApiClient.getInstance()
+                        .getApi()
+                        .getMessage(
+                                getMessageForm.getCode(),
+                                getMessageForm.getZone(),
+                                getMessageForm.getDirectorate(),
+                                getMessageForm.getSurface(),
+                                getMessageForm.getArea(),
+                                getMessageForm.getLocationX(),
+                                getMessageForm.getLocationY(),
+                                getMessageForm.getGmail());
+        mService.enqueue(
+                new Callback<GetMessageResponse>() {
+                    @Override
+                    public void onResponse(
+                            Call<GetMessageResponse> call,
+                            Response<GetMessageResponse> response) {
+                        WeiboDialogUtils.closeDialog(loadingDialog);
+                        try {
+                            if (response.isSuccessful()) {
+                                new GlideToast.makeToast(reviewData.this,"Success");
+
+
+                            } else {
+                                String s = response.errorBody().string();
+                                try {
+                                    JSONObject jsonObject = new JSONObject(s);
+                                    new GlideToast.makeToast(reviewData.this,"Send Fault Error 401");
+                                } catch (JSONException e) {
+                                    new GlideToast.makeToast(reviewData.this,"Send Fault Error 404");
+                                }
+                            }
+                        } catch (IOException e) {
+                            new GlideToast.makeToast(reviewData.this,"Connect Server Error");
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<GetMessageResponse> call, Throwable t) {
+                        call.cancel();
+                        WeiboDialogUtils.closeDialog(loadingDialog);
+                        new GlideToast.makeToast(reviewData.this,"Network Error");
+                    }
+                });
+    }
 
 }

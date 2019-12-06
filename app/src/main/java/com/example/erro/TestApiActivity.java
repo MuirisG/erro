@@ -160,11 +160,11 @@ public class TestApiActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         protected Void doInBackground(Void... arg0) {
             HttpHandler sh = new HttpHandler();
-            String sub_url = "users/loginUser.php?";
+            String sub_url = ".../.../...";
 
-            String password = "6Godmode!!";
-            String parameters = "email=" +  username_myserver;
-            String base_url = "https://urban.network/Api/";
+            String password = "...";
+            String parameters = "...=" +  username_myserver;
+            String base_url = ".../.../";
             String url = base_url + sub_url + parameters;
             String jsonStr = sh.makeServiceCall(url);
             if (jsonStr != null) {

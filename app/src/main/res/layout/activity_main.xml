@@ -4,37 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#524E4E"
+    android:background="#050505"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="225dp"
         android:fontFamily="@font/audiowide"
         android:text="erro"
         android:textAlignment="center"
-        android:textColor="#00BCD4"
-        android:textSize="55dp" />
+        android:textColor="#FFEB3B"
+        android:textSize="52dp" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="50dp"
-        app:srcCompat="@android:drawable/ic_lock_power_off" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textColor="#00BCD4"
-        android:textSize="16dp"
-        android:textAlignment="center"
-        android:text="click turn on button to start"/>
+        android:layout_width="wrap_content"
+        android:layout_height="164dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/power" />
 
 
 </LinearLayout>

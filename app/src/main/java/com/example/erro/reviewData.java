@@ -16,11 +16,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -28,10 +30,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.erro.API.ApiClient;
 import com.example.erro.API.GetMessageForm;
 import com.example.erro.API.GetMessageResponse;
+import com.example.erro.API.HttpHandler;
 import com.example.erro.Adapter.SpinnerAdapter;
 import com.example.erro.Utils.GlideToast;
 import com.example.erro.Utils.WeiboDialogUtils;
@@ -58,9 +62,15 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -70,14 +80,15 @@ import retrofit2.Response;
 
 public class reviewData extends AppCompatActivity implements View.OnClickListener{
 
+    String base_url = "https://mycouncil.net";
     private Spinner spinnerZone, spinnerDirectorate, spinnerSurface;
     String[] zonelist={"zone1", "zone2", "zone3","zone4"};
     String[] directoratelist={"youghal", "cobh", "glanmire","blarney"};
     String[] surfacelist={"tarmac", "grass verge", "concrete foothpath","hra"};
-    String selectedZone, selectedDirectorate, selectedSurface, selectedLocationX, selectedLocationY, selectedArea;
+    String selectedZone, selectedDirectorate, selectedSurface, selectedLocationX, selectedLocationY, selectedArea = "0";
     TextView tvlocationX, tvlocationY, tvResult, btnResult;
     EditText etLength, etBreadth;
-    Button btnAttachPhoto, btnSend;
+    Button btnAttachPhoto, btnSend, btnGetID, btnUploadPhoto;
     ImageView ivPhoto;
     protected Dialog loadingDialog;
 
@@ -98,6 +109,8 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
     private String imagepath="";
     private int serverResponseCode = 0;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+    String uploadPhotoName = "";
+    String uploadPhotoNamewithoutExtention = "";
 
     private GetMessageForm getMessageForm;
     
@@ -116,12 +129,16 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
         spinnerDirectorate = findViewById(R.id.spinner_directorate);
         spinnerSurface = findViewById(R.id.spinner_surface);
         btnAttachPhoto = findViewById(R.id.btn_attach_photo);
-        ivPhoto = findViewById(R.id.attached_photo);
+        ivPhoto = findViewById(R.id.iv_photo);
         btnSend = findViewById(R.id.btn_send);
+        btnGetID = findViewById(R.id.btn_getPhotoID);
+        btnUploadPhoto = findViewById(R.id.btn_uploadPhoto);
 
         btnResult.setOnClickListener(this);
         btnAttachPhoto.setOnClickListener(this);
         btnSend.setOnClickListener(this);
+        btnGetID.setOnClickListener(this);
+        btnUploadPhoto.setOnClickListener(this);
 
         SpinnerAdapter customAdapter1 = new SpinnerAdapter(getApplicationContext(),zonelist);
         spinnerZone.setAdapter(customAdapter1);
@@ -154,9 +171,9 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-        init();
-        restoreValuesFromBundle(savedInstanceState);
-        startLocationButtonClick();
+//        init();
+//        restoreValuesFromBundle(savedInstanceState);
+//        startLocationButtonClick();
     }
 /////////////////////////////////// start of get location coordination ///////////////////////////////////////
     private void init() {
@@ -298,11 +315,10 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
         startActivityForResult(chooserIntent, PICK_IMAGE);
     }
+
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
-
-
         if (resultCode == RESULT_OK) {
             try {
                 final Uri imageUri = data.getData();
@@ -313,10 +329,10 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-
         }else {
         }
     }
+
     public String getPath(Uri uri) {
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
@@ -340,7 +356,98 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
 
         return path;
     }
-/////////////////////////////////// end of load picture //////////////////////////////////////////////////////
+
+    public int uploadFile(String sourceFileUri) {
+
+        String fileName = sourceFileUri.substring(sourceFileUri.lastIndexOf("/")+1);
+        fileName = "1" + "__" + fileName;
+        HttpURLConnection conn = null;
+        DataOutputStream dos = null;
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1 * 1024 * 1024;
+        File sourceFile = new File(sourceFileUri);
+
+        if (!sourceFile.isFile()) {
+            WeiboDialogUtils.closeDialog(loadingDialog);
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    new GlideToast.makeToast(reviewData.this,"Choose one of image file");
+                }
+            });
+            return 0;
+        }
+        else{
+            try {
+                FileInputStream fileInputStream = new FileInputStream(sourceFile);
+                URL url = new URL(upLoadServerUri);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setDoInput(true); // Allow Inputs
+                conn.setDoOutput(true); // Allow Outputs
+                conn.setUseCaches(false); // Don't use a Cached Copy
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Connection", "Keep-Alive");
+                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+
+                conn.setRequestProperty("uploaded_file", fileName);
+
+                dos = new DataOutputStream(conn.getOutputStream());
+                dos.writeBytes(twoHyphens + boundary + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
+                        + fileName + "\"" + lineEnd);
+                dos.writeBytes(lineEnd);
+                bytesAvailable = fileInputStream.available();
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                buffer = new byte[bufferSize];
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+                while (bytesRead > 0) {
+                    dos.write(buffer, 0, bufferSize);
+                    bytesAvailable = fileInputStream.available();
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+                }
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+                serverResponseCode = conn.getResponseCode();
+                String serverResponseMessage = conn.getResponseMessage();
+                Log.i("uploadFile", "HTTP Response is : "
+                        + serverResponseMessage + ": " + serverResponseCode);
+                if(serverResponseCode == 200){
+                    WeiboDialogUtils.closeDialog(loadingDialog);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            new GlideToast.makeToast(reviewData.this, "success");
+                        }
+                    });
+                } else {
+                    WeiboDialogUtils.closeDialog(loadingDialog);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            new GlideToast.makeToast(reviewData.this, "photo upload fault");
+                        }
+                    });
+
+                }
+                fileInputStream.close();
+                dos.flush();
+                dos.close();
+
+            } catch (MalformedURLException ex) {
+                WeiboDialogUtils.closeDialog(loadingDialog);
+                ex.printStackTrace();
+            } catch (Exception e) {
+                WeiboDialogUtils.closeDialog(loadingDialog);
+                e.printStackTrace();
+            }
+            return serverResponseCode;
+        }
+    }
+
+    /////////////////////////////////// end of load picture //////////////////////////////////////////////////////
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.btn_result) {
@@ -365,13 +472,32 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
             loadingDialog = WeiboDialogUtils.createLoadingDialog(this, "Sending data");
             loadingDialog.show();
             RequestSend();
+        } else if(view.getId() == R.id.btn_getPhotoID) {
+            loadingDialog = WeiboDialogUtils.createLoadingDialog(this, "getting latest photo id");
+            loadingDialog.show();
+            new GetLatestPhotoID().execute();
+        } else if(view.getId() == R.id.btn_uploadPhoto) {
+            upLoadServerUri = "https://mycouncil.net/api/upload.php";
+//            upLoadServerUri = "https://urban.network/Api/upload/photoupload.php";
+            loadingDialog = WeiboDialogUtils.createLoadingDialog(this, "uploading photo");
+            loadingDialog.show();
+
+//                    uploadFile(imagepath);
+
+            new Thread(new Runnable() {
+                public void run() {
+                    uploadFile(imagepath);
+                }
+            }).start();
         }
     }
-
+/////////////////////////////////// send data //////////////////////////////////////////////////////
     public void RequestSend() {
         String code,  gmail;
         code = "erro";
         gmail = "test@gmail";
+        selectedLocationX = tvlocationX.getText().toString();
+        selectedLocationY = tvlocationY.getText().toString();
 
 
         getMessageForm = new GetMessageForm(code, selectedZone, selectedDirectorate, selectedSurface, selectedArea, selectedLocationX, selectedLocationY, gmail);
@@ -422,5 +548,58 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
                     }
                 });
     }
+/////////////////////////////////// upload photo ///////////////////////////////////////////////////
 
+    private class GetLatestPhotoID extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            String sub_url = "/api/profilePicture.php";
+            String parameters = "";
+            String url = base_url + sub_url + parameters;
+            String jsonStr = sh.makeServiceCall(url);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+                    String id = jsonObj.getString("id");
+                    int a = Integer.parseInt(id);
+                    a = a+1;
+                    uploadPhotoName = String.valueOf(a);
+                    uploadPhotoNamewithoutExtention = uploadPhotoName;
+                } catch (final JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),"Json parsing error photoID: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            WeiboDialogUtils.closeDialog(loadingDialog);
+            new GlideToast.makeToast(reviewData.this, uploadPhotoName + "  " + imagepath);
+
+        }
+    }
 }

@@ -251,7 +251,7 @@
                     android:textColor="#FCF8F8"
                     android:textSize="16dp" />
                 <ImageView
-                    android:id="@+id/attached_photo"
+                    android:id="@+id/iv_photo"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_marginLeft="30dp"/>

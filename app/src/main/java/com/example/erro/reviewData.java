@@ -129,7 +129,7 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
         spinnerDirectorate = findViewById(R.id.spinner_directorate);
         spinnerSurface = findViewById(R.id.spinner_surface);
         btnAttachPhoto = findViewById(R.id.btn_attach_photo);
-        ivPhoto = findViewById(R.id.attached_photo);
+        ivPhoto = findViewById(R.id.iv_photo);
         btnSend = findViewById(R.id.btn_send);
         btnGetID = findViewById(R.id.btn_getPhotoID);
         btnUploadPhoto = findViewById(R.id.btn_uploadPhoto);
@@ -171,9 +171,9 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-        init();
-        restoreValuesFromBundle(savedInstanceState);
-        startLocationButtonClick();
+//        init();
+//        restoreValuesFromBundle(savedInstanceState);
+//        startLocationButtonClick();
     }
 /////////////////////////////////// start of get location coordination ///////////////////////////////////////
     private void init() {
@@ -418,10 +418,19 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
                         + serverResponseMessage + ": " + serverResponseCode);
                 if(serverResponseCode == 200){
                     WeiboDialogUtils.closeDialog(loadingDialog);
-                    new GlideToast.makeToast(reviewData.this, "uploaded");
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            new GlideToast.makeToast(reviewData.this, "success");
+                        }
+                    });
                 } else {
                     WeiboDialogUtils.closeDialog(loadingDialog);
-                    new GlideToast.makeToast(reviewData.this, "fault");
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            new GlideToast.makeToast(reviewData.this, "photo upload fault");
+                        }
+                    });
+
                 }
                 fileInputStream.close();
                 dos.flush();
@@ -468,11 +477,18 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
             loadingDialog.show();
             new GetLatestPhotoID().execute();
         } else if(view.getId() == R.id.btn_uploadPhoto) {
-//            upLoadServerUri = "https://mycouncil.net/api/upload.php";
-            upLoadServerUri = "https://urban.network/Api/upload/photoupload.php";
+            upLoadServerUri = "https://mycouncil.net/api/upload.php";
+//            upLoadServerUri = "https://urban.network/Api/upload/photoupload.php";
             loadingDialog = WeiboDialogUtils.createLoadingDialog(this, "uploading photo");
             loadingDialog.show();
-            uploadFile(imagepath);
+
+//                    uploadFile(imagepath);
+
+            new Thread(new Runnable() {
+                public void run() {
+                    uploadFile(imagepath);
+                }
+            }).start();
         }
     }
 /////////////////////////////////// send data //////////////////////////////////////////////////////
@@ -480,8 +496,8 @@ public class reviewData extends AppCompatActivity implements View.OnClickListene
         String code,  gmail;
         code = "erro";
         gmail = "test@gmail";
-        selectedLocationX = "aaaa";
-        selectedLocationY = "bbbb";
+        selectedLocationX = tvlocationX.getText().toString();
+        selectedLocationY = tvlocationY.getText().toString();
 
 
         getMessageForm = new GetMessageForm(code, selectedZone, selectedDirectorate, selectedSurface, selectedArea, selectedLocationX, selectedLocationY, gmail);
